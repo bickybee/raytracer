@@ -31,7 +31,7 @@ MacOS can view PPM files by default. You may need to find a different solution o
 - [x] 6. Surface Normals and Multiple Objects
 - [x] 7. Moving Camera Into Its Own Class
 - [x] 8. Antialiasing
-- [ ] 9. Diffuse Materials
+- [x] 9. Diffuse Materials
 - [ ] 10. Metal
 - [ ] 11. Dielectrics
 - [ ] 12. Positionable Camera
