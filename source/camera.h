@@ -106,8 +106,8 @@ class camera {
     colour ray_colour(const ray &r, int depth, const hittable &world) const {
       hit_record hit;
       if (depth <= 0)
-        // My understanding here: if we keep bouncing but only hit other diffuse mats
-        // Then no light is received.
+        // Recursively, this will make the end result 0! My understainding:
+        // If we keep bouncing but never hit a light source (only diffuse mats), then no light is received
         return colour(0,0,0);
 
       if (world.raycast(r, interval(0.001, infinity), hit)) {
