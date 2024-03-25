@@ -111,7 +111,8 @@ class camera {
         return colour(0,0,0);
 
       if (world.raycast(r, interval(0.001, infinity), hit)) {
-        vec3 random_dir = random_on_hemisphere(hit.normal);
+        // vec3 random_dir = random_on_hemisphere(hit.normal); // Uniform distribution model
+        vec3 random_dir = hit.normal + random_unit_vector(); // Lambertian model, more likely to bounce in dir of normal
         // Gray diffuse -> returns 50% of colour from bounced light
         return 0.5 * ray_colour(ray(hit.point, random_dir), depth - 1, world);
       }
