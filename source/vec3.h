@@ -59,6 +59,11 @@ class vec3 {
       return sqrt(length_squared());
     }
 
+    bool near_zero() const {
+      double epsilon = 1e-8;
+      return (fabs(v[0]) < epsilon) && (fabs(v[1]) < epsilon) && (fabs(v[2]) < epsilon);
+    }
+
     static vec3 random () {
       return vec3(random_double(), random_double(), random_double());
     }

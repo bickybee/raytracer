@@ -1,13 +1,15 @@
 #ifndef HITTABLE_H
 #define HITTABLE_H
 
-#include "ray.h"
+#include "utils.h"
+
+class material;
 
 class hit_record {
   public:
     double t; // How far along the original ray is the hit.
     point3 point; // Actual location of the hit.
-
+    shared_ptr<material> mat;
     vec3 normal;
     bool front_face;
     

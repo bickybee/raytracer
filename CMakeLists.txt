@@ -16,7 +16,8 @@ add_executable(raytracer
                 source/hittable_list.h
                 source/sphere.h
                 source/interval.h
-                source/camera.h)
+                source/camera.h
+                source/material.h)
 
 target_compile_features(raytracer PUBLIC cxx_std_11)
 set_target_properties(raytracer PROPERTIES CXX_EXTENSIONS OFF)

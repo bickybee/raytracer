@@ -4,12 +4,9 @@
 #include "hittable.h"
 
 class sphere : public hittable {
-  private:
-    point3 center;
-    double radius;
-
   public:
-    sphere(point3 _center, double _radius) : center(_center), radius(_radius) {}
+    sphere(point3 _center, double _radius, shared_ptr<material> _material)
+      : center(_center), radius(_radius), mat(_material) {}
 
     bool raycast(const ray &r, interval range, hit_record &hit) const override {
       // Solve quadratic formula... (simplified with half_b to reduce some operations)
@@ -36,7 +33,7 @@ class sphere : public hittable {
 
       hit.t = t;
       hit.point = r.at(t);
-
+      hit.mat = mat;
       // Naturally, the normal of a sphere at P is (P - center of sphere).
       // Also naturally, the length of this normal = r.
       // So, to get the unit length, we simply divide by r.
@@ -44,7 +41,11 @@ class sphere : public hittable {
       hit.set_normal(r, unit_normal);
       return true;
     }
-
+    
+  private:
+    point3 center;
+    double radius;
+    shared_ptr<material> mat;
 };
 
 #endif
