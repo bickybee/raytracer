@@ -14,6 +14,6 @@ int main() {
   world.add(make_shared<sphere>(point3(0,0,-1), 0.5));
   world.add(make_shared<sphere>(point3(0,-100.5,-1), 100));
 
-  camera cam = camera(16.0 / 9.0, 600, 100);
+  camera cam = camera(16.0 / 9.0, 600, 100, 50);
   cam.render(world);
 };

@@ -11,7 +11,7 @@ class sphere : public hittable {
   public:
     sphere(point3 _center, double _radius) : center(_center), radius(_radius) {}
 
-    bool raycast(const ray &r, double tmin, double tmax, hit_record &hit) const override {
+    bool raycast(const ray &r, interval range, hit_record &hit) const override {
       // Solve quadratic formula... (simplified with half_b to reduce some operations)
       vec3 center_to_origin = r.origin() - center;
       double a = r.direction().length_squared();
@@ -27,9 +27,9 @@ class sphere : public hittable {
       // Find a root between tmin and tmax.
       double sqrt_d = sqrt(discriminant);
       double t = (-half_b - sqrt_d) / a; // Near root.
-      if (t < tmin || t > tmax) {
+      if (!range.contains(t)) {
         t = (-half_b + sqrt_d) / a; // Far root.
-        if (t < tmin || t > tmax) {
+        if (!range.contains(t)) {
           return false;
         }
       }

@@ -13,10 +13,11 @@ class camera {
     double target_aspect_ratio = 1.0;
     int image_w                = 100;
     int samples_per_pixel      = 10;
+    int max_depth              = 10;
 
   public:
-    camera(double aspect_ratio, int image_width, int samples_pp)
-           : target_aspect_ratio(aspect_ratio), image_w(image_width), samples_per_pixel(samples_pp) {}
+    camera(double aspect_ratio, int image_width, int samples_pp, int depth)
+           : target_aspect_ratio(aspect_ratio), image_w(image_width), samples_per_pixel(samples_pp), max_depth(depth) {}
     camera() { }
 
     void render(const hittable &world) {
@@ -36,7 +37,7 @@ class camera {
           colour pixel_colour(0, 0, 0);
           for (int sample = 0; sample < samples_per_pixel; ++sample) {
             ray r = get_ray(i, j);
-            pixel_colour += ray_colour(r, world);
+            pixel_colour += ray_colour(r, max_depth, world);
           }
           write_colour(std::cout, pixel_colour, samples_per_pixel);
         }
@@ -102,16 +103,23 @@ class camera {
       return (x * pixel_delta_u) + (y * pixel_delta_v);
     }
 
-    colour ray_colour(const ray &r, const hittable &world) const {
+    colour ray_colour(const ray &r, int depth, const hittable &world) const {
       hit_record hit;
-      if (world.raycast(r, 0, 100, hit)) {
-        // Colour = normal, remapped from -1 to 1 -> 0 - 1
-        return 0.5 * (hit.normal + colour(1,1,1));
+      if (depth <= 0)
+        // My understanding here: if we keep bouncing but only hit other diffuse mats
+        // Then no light is received.
+        return colour(0,0,0);
+
+      if (world.raycast(r, interval(0.001, infinity), hit)) {
+        vec3 random_dir = random_on_hemisphere(hit.normal);
+        // Gray diffuse -> returns 50% of colour from bounced light
+        return 0.5 * ray_colour(ray(hit.point, random_dir), depth - 1, world);
       }
 
+      // Default background / "ambient lighting" = lerp
       vec3 unit_dir = normalized(r.direction());
-      double progress = 0.5 * (unit_dir.y() + 1.0);
-      return lerp_colour(colour(1,1,1), colour(0.3,0.4,0.9), progress);
+      double a = 0.5 * (unit_dir.y() + 1.0);
+      return lerp_colour(colour(1,1,1), colour(0.5,0.7,1.0), a);
     }
 };
 

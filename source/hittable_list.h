@@ -25,13 +25,13 @@ class hittable_list : public hittable {
       objects.push_back(object);
     }
 
-    bool raycast(const ray &r, double tmin, double tmax, hit_record &hit) const override {
+    bool raycast(const ray &r, interval range, hit_record &hit) const override {
       hit_record test_hit;
       bool did_hit = false;
-      double nearest_dist = tmax;
+      double nearest_dist = range.max;
 
       for(const auto &obj : objects) {
-        if (obj->raycast(r, tmin, tmax, test_hit) && test_hit.t < nearest_dist) {
+        if (obj->raycast(r, range, test_hit) && test_hit.t < nearest_dist) {
           did_hit = true;
           nearest_dist = test_hit.t;
           hit = test_hit;

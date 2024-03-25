@@ -27,7 +27,7 @@ class hittable {
     virtual ~hittable() = default; // use c++ default
     
     // "= 0" means no default implementation.
-    virtual bool raycast(const ray &r, double tmin, double tmax, hit_record &hit) const = 0;
+    virtual bool raycast(const ray &r, interval range, hit_record &hit) const = 0;
 };
 
 #endif

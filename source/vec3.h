@@ -58,6 +58,14 @@ class vec3 {
     double length() const {
       return sqrt(length_squared());
     }
+
+    static vec3 random () {
+      return vec3(random_double(), random_double(), random_double());
+    }
+
+    static vec3 random(double min, double max) {
+      return vec3(random_double(min, max), random_double(min, max), random_double(min, max));
+    }
   };
 
   using point3 = vec3; // Useful alias.
@@ -106,6 +114,28 @@ class vec3 {
 
   inline vec3 normalized(const vec3 &v) {
     return v / v.length();
+  }
+
+  inline vec3 random_in_unit_sphere() {
+    // Rejection method...
+    while (true) {
+      point3 p = vec3::random(-1,1); // Random point inside a cube
+      if (p.length_squared() < 1) // Accept point if it's inside the unit sphere
+        return p;
+    }
+  }
+
+  inline vec3 random_unit_vector() {
+    // Evenly distributed random normal vector
+    return normalized(random_in_unit_sphere());
+  }
+
+  inline vec3 random_on_hemisphere(const vec3& normal) {
+    vec3 v = random_unit_vector();
+    if (dot(v, normal) > 0.0)
+      return v;
+    else
+      return -v;
   }
 
 #endif
